@@ -306,4 +306,33 @@ select count(*),sum(price) from houses where house_type = 'Apartment';
 -- 8. Агентсволардын арасынан аты ‘My_House’ болгон агентсвоны, агентсвонын адресин жана анын бардык уйлорун, уйлордун        адрессин чыгар.
 select agencyes.name,addresses.id, city, region, street,houses.id, houses.house_type, houses.price, houses.rating, houses.description, houses.room, houses.furniture, houses.address_id, houses.owner_id,addresses.id, city, region, street from agencyes join addresses on agencyes.address_id = addresses.id join rent_infos on agencyes.id = rent_infos.agency_id join houses on rent_infos.house_id = houses.id where agencyes.name = 'My House';
 
+-- 9. Уйлордун арасынан мебели бар уйлорду, уйдун ээсин жана уйдун адрессин чыгар.
+select * from houses join owners on houses.owner_id = owners.id join addresses on houses.address_id = addresses.id where furniture;
+
+-- 10.Кленти жок уйлордун баарын жана анын адрессин жана ал уйлор кайсыл агентсвога тийешелуу экенин чыгар.
+select * from houses full join addresses on houses.address_id = addresses.id full join rent_infos on houses.id = rent_infos.house_id full join agencyes on rent_infos.agency_id = agencyes.id where rent_infos.customer_id  is null ;
+
+-- 11.Клиенттердин улутуна карап, улутуну жана ал улуутта канча клиент жашайт санын чыгар.
+select nationality,count(*) from customers group by nationality;
+
+-- 12.Уйлордун арасынан рейтингтери чон, кичине, орточо болгон 3 уйду чыгар.
+select houses.rating,houses.furniture,houses.price,houses.house_type, max(rating),avg(rating),min(rating) from houses group by houses.rating,houses.furniture,houses.price,houses.house_type;
+
+-- 13.Уйлору жок киленттерди, клиенттери жок уйлорду чыгар.
+select * from houses full join rent_infos on houses.id = rent_infos.house_id full join customers on rent_infos.customer_id = customers.id where rent_infos.house_id is null ;
+
+select * from houses full join rent_infos on houses.id = rent_infos.house_id full join customers on rent_infos.customer_id = customers.id where rent_infos.customer_id is null ;
+
+
+-- 14.Уйлордун бааларынын орточо суммасын чыгар.
+select avg(price) from houses;
+
+-- 15.‘A’ тамга менен башталган уйдун ээсинин аттарын, клиенттердин аттарын чыгар.
+select * from owners join rent_infos ri on owners.id = ri.owner_id join customers c on c.id = ri.customer_id where owners.first_name like 'A%';
+
+-- 16.Эн уйу коп owner_ди жана анын уйлорунун санын чыгар.
+
+
+--24
+select houses.rating,houses.price, houses.furniture ,max(rating) from houses group by houses.rating,houses.price, houses.furniture order by rating limit 5;
 
